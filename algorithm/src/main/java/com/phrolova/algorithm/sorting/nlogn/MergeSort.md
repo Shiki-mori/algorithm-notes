@@ -84,3 +84,92 @@ sort(L..R)
 时间复杂度：O(n log n)（最好、最坏、平均都是）  
 空间复杂度：O(n)（辅助数组）  
 稳定
+
+## 初版代码（多处错误）
+
+```java
+package com.phrolova.algorithm.sorting.nlogn;
+
+public class MergeSort {
+    public static void mergeSort(int[] arr) {
+
+        if (arr == null || arr.length < 2)
+            return;
+        sort(arr, 0, arr.length - 1);
+    }
+
+    public static int[] sort(int[] arr, int L, int R) {
+
+        if (R - L < 1)
+            return arr;
+
+        int mid = L + (R - L) / 2;
+        int[] left = sort(arr,L, mid);
+        int[] right = sort(arr,mid + 1, R);
+        return merge(left, right);
+    }
+
+    public static int[] merge(int[] L, int[] R) {
+        int p1 = 0;
+        int p2 = 0;
+        int[] target = new int[L.length + R.length - 2];
+        for (int i = 0; p1 < L.length && p2 < R.length; i++) {
+            if (L[p1] <= R[p2]) {
+                target[i] = L[p1];
+                p1++;
+            } else {
+                target[i] = R[p2];
+                p2++;
+            }
+        }
+        return target;
+    }
+}
+```
+
+## 初版正确代码
+
+```java
+package com.phrolova.algorithm.sorting.nlogn;
+
+public class MergeSort {
+    public static void mergeSort(int[] arr) {
+
+        if (arr == null || arr.length < 2) return;
+        int[] sorted = sort(arr, 0, arr.length - 1);
+        System.arraycopy(sorted, 0, arr, 0, sorted.length);
+
+    }
+
+    public static int[] sort(int[] arr, int L, int R) {
+
+        if (R - L < 1) return new int[]{arr[L]};
+
+        int mid = L + (R - L) / 2;
+        int[] left = sort(arr, L, mid);
+        int[] right = sort(arr, mid + 1, R);
+        return merge(left, right);
+    }
+
+    public static int[] merge(int[] L, int[] R) {
+        int p1 = 0;
+        int p2 = 0;
+        int i = 0;
+        int[] target = new int[L.length + R.length];
+        while (p1 < L.length && p2 < R.length) {
+            if (L[p1] <= R[p2]) {
+                target[i++] = L[p1++];
+            } else {
+                target[i++] = R[p2++];
+            }
+        }
+        while (p1 < L.length) {
+            target[i++] = L[p1++];
+        }
+        while (p2 < R.length) {
+            target[i++] = R[p2++];
+        }
+        return target;
+    }
+}
+```
