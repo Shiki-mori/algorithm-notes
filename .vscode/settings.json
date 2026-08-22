@@ -1,0 +1,5 @@
+{
+  "cursor.general.enableTab": false,
+  "cursor.completions.enabled": false,
+  "editor.inlineSuggest.enabled": false
+}
