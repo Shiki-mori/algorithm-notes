@@ -1,5 +1,10 @@
 {
-  "cursor.general.enableTab": false,
-  "cursor.completions.enabled": false,
+  "cursor.cpp.disabledLanguages": [
+    "java",
+    "markdown",
+    "xml",
+    "json",
+    "plaintext"
+  ],
   "editor.inlineSuggest.enabled": false
 }
