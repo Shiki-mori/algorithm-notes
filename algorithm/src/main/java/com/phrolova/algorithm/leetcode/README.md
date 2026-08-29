@@ -26,3 +26,4 @@
 | 题号 | 题名 | 目录 |
 | --- | --- | --- |
 | 1 | Two Sum | [p0001_two_sum](p0001_two_sum/) |
+| 1768 | Merge Strings Alternately | [p1768_merge_strings_alternately](p1768_merge_strings_alternately/) |
