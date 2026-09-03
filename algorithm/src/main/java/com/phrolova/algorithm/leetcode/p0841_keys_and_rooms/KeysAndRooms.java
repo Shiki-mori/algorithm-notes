@@ -20,6 +20,7 @@ public class KeysAndRooms {
     public void dfs(List<List<Integer>> rooms, int x) {
         vis[x] = true;
         num++;
+        // rooms.get(x)：节点x的所有邻居
         for (int it : rooms.get(x)) {
             if (!vis[it]) {
                 dfs(rooms, it);
