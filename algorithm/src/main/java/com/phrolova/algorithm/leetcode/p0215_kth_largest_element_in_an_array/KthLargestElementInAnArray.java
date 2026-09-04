@@ -116,6 +116,7 @@ public class KthLargestElementInAnArray {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
         for (int num : nums) {
             minHeap.offer(num);
+            // 堆仅保留当前见过的k个最大的数。则堆顶是这k个中最小的。
             if (minHeap.size() > k) {
                 minHeap.poll();
             }
