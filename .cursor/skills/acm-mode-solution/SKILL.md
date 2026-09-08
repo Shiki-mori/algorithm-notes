@@ -1,13 +1,20 @@
 ---
 name: acm-mode-solution
-description: Converts an existing LeetCode Java solution into ACM written-test form that reads stdin and writes stdout, as Main.java in the same problem directory. Use when the user asks for ACM mode, ACM 笔试, 笔试输入输出, 自行处理输入输出, or Main.java for a problem under algorithm/src/main/java/com/phrolova/algorithm/leetcode.
+description: Converts an existing LeetCode Java solution into ACM written-test form (stdin/stdout) as Main.java, or reviews a user-written Main.java for correctness. Use when the user asks for ACM mode, ACM 笔试, 笔试输入输出, 自行处理输入输出, Main.java, or to check/review ACM code under algorithm/src/main/java/com/phrolova/algorithm/leetcode.
 ---
 
 # ACM 模式笔试代码
 
 由于部分公司的笔试为ACM模式，因此用户需要练习ACM模式的笔试题。即需要自行处理输入和输出。当用户要求为对应题目提供ACM模式代码时，将已有的代码在同级目录下新增文件 Main.java，改写为ACM笔试代码形式。
 
-本 skill 只改写 ACM 代码，不改原题解文件，不补 `Problem.md` / `Solution.md`，除非用户另外要求。
+用户可能自行尝试创建 Main.java文件并编写ACM模式代码。当用户要求检查代码正确性时，若用户代码有错误或可改进，需要明确指出并提供修改后的代码。对用户的原有代码需要注释，禁止删除。
+
+本 skill 只处理 ACM 的 `Main.java`，不改原题解文件，不补 `Problem.md` / `Solution.md`，除非用户另外要求。
+
+先判断任务类型：
+
+- **生成**：用户要求提供 ACM 模式代码，且目录下没有用户编写的 `Main.java`。
+- **检查**：用户要求检查正确性/对错/改进，或目录下已有用户编写的 `Main.java`。检查优先于覆盖。
 
 ## 适用范围
 
@@ -17,7 +24,7 @@ description: Converts an existing LeetCode Java solution into ACM written-test f
 - `leetcode/common/` 不是题目，不要当题改写。
 - 不要改 `algorithm/src/main/java/com/phrolova/algorithm/Main.java`。
 
-## 工作流程
+## 生成工作流程
 
 1. **锁定题目**：用户说的题号、题名、当前文件/目录。目标不清时只问一句。
 2. **读材料**（按存在情况，缺了就跳过）
@@ -26,8 +33,38 @@ description: Converts an existing LeetCode Java solution into ACM written-test f
    - `Solution.md`：多解法时用来选主推解
 3. **选定解法**：用户点名则用点名的；否则用主推/默认那一版。不要把多种解法都塞进 `Main.java`。
 4. **设计 ACM 输入输出**：把 LeetCode 函数签名改成 stdin / stdout。格式约定见下方。必须在 `Main.java` 顶部注释写出与 LeetCode 示例对应的一份样例输入和输出。
-5. **新增文件**：在题目同级目录创建 `Main.java`。已有则覆盖更新，不要另起文件名。
+5. **新增文件**：在题目同级目录创建 `Main.java`。若该文件已存在且含用户代码，不要覆盖，改走检查流程。
 6. **保持原文件不动**：不要改原解法类、`Problem.md`、`Solution.md`。
+
+## 检查工作流程
+
+用户可能自行尝试创建 `Main.java` 并编写 ACM 模式代码。按下列步骤检查，不要当成「重新生成」去覆盖。
+
+1. **锁定文件**：优先读当前打开的 `Main.java`，否则读题目同级目录的 `Main.java`。
+2. **对照材料**：读同目录解法类、`Problem.md`（示例与约束）。核对算法、边界、输入输出格式、I/O 效率。
+3. **判断结果**
+   - 正确且无需改进：回复说明通过，指出依据（样例/复杂度/I/O），**不要改文件**。
+   - 有错误或可改进：回复中**明确指出**每一处问题（错在哪、为何错、应改成什么），并在同一 `Main.java` 里提供修改后的代码。
+4. **保留原文（强制）**：对用户的原有代码需要注释，禁止删除。
+   - 用 `//` 逐行注释用户原文（避免原文含 `*/` 时块注释被截断），紧挨在修改后的代码上方。
+   - 在注释块开头加一行说明，例如 `// === 原代码（保留）===`。
+   - 只注释被替换的那段；未改动的部分保持可编译、不要整文件注释掉。
+   - 禁止 `git checkout`、禁止新建另一个文件来「丢掉」原文。
+
+```java
+public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintWriter out = new PrintWriter(System.out);
+
+    // === 原代码（保留）===
+    // Scanner sc = new Scanner(System.in);
+    // int n = sc.nextInt();
+
+    int n = Integer.parseInt(br.readLine().trim());
+    // ... 修改后的读入与求解
+    out.flush();
+}
+```
 
 ## 文件约定
 
@@ -93,6 +130,7 @@ public class Main {
 
 ## 约束
 
-- 用中文短句回复：说明生成了哪个 `Main.java`、选了哪版解法、输入输出格式是什么。
-- 不要在回复里贴出整份 `Main.java`，除非用户要贴代码。
+- 用中文短句回复。
+- **生成**：说明生成了哪个 `Main.java`、选了哪版解法、输入输出格式是什么。不要在回复里贴出整份 `Main.java`，除非用户要贴代码。
+- **检查**：必须逐条指出错误或可改进点；有改动时同步写入 `Main.java`（原文注释保留 + 修改后代码）。回复里给出修改要点，不要只说「已改好」。
 - 原解法有本地 `main` 测试的，不要把它的硬编码用例原样搬进 ACM 版；ACM 版只从 stdin 读。
