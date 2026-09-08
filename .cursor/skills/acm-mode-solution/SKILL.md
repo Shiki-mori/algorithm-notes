@@ -1,6 +1,6 @@
 ---
 name: acm-mode-solution
-description: Converts an existing LeetCode Java solution into ACM written-test form (stdin/stdout) as Main.java, or reviews a user-written Main.java for correctness. Use when the user asks for ACM mode, ACM 笔试, 笔试输入输出, 自行处理输入输出, Main.java, or to check/review ACM code under algorithm/src/main/java/com/phrolova/algorithm/leetcode.
+description: Converts an existing LeetCode Java solution into ACM written-test form as Main.java, reviews a user-written Main.java, or provides ACM stdin/stdout samples without code. Use when the user asks for ACM mode, ACM 笔试, 笔试输入输出, 输入输出样例, 编码参考, 自行处理输入输出, Main.java, or to check/review ACM code under algorithm/src/main/java/com/phrolova/algorithm/leetcode.
 ---
 
 # ACM 模式笔试代码
@@ -9,12 +9,17 @@ description: Converts an existing LeetCode Java solution into ACM written-test f
 
 用户可能自行尝试创建 Main.java文件并编写ACM模式代码。当用户要求检查代码正确性时，若用户代码有错误或可改进，需要明确指出并提供修改后的代码。对用户的原有代码需要注释，禁止删除。
 
-本 skill 只处理 ACM 的 `Main.java`，不改原题解文件，不补 `Problem.md` / `Solution.md`，除非用户另外要求。
+有时用户只想要一份ACM模式的输入输出样例供编码参考，此时仅提供样例，不提供代码。
+
+本 skill 只处理 ACM 相关请求，不改原题解文件，不补 `Problem.md` / `Solution.md`，除非用户另外要求。
 
 先判断任务类型：
 
+- **样例**：用户只要 ACM 输入输出样例 / 编码参考，不要代码。只回复样例，不写 `Main.java`，不给算法或 I/O 代码。
 - **生成**：用户要求提供 ACM 模式代码，且目录下没有用户编写的 `Main.java`。
 - **检查**：用户要求检查正确性/对错/改进，或目录下已有用户编写的 `Main.java`。检查优先于覆盖。
+
+用户同时要样例和代码时走生成（`Main.java` 顶部仍写样例注释）。明确只要样例、编码参考、且未要求写 `Main.java` / 代码时，走样例。
 
 ## 适用范围
 
@@ -23,6 +28,30 @@ description: Converts an existing LeetCode Java solution into ACM written-test f
 - 目标不在该目录：一句话说明范围后停止。
 - `leetcode/common/` 不是题目，不要当题改写。
 - 不要改 `algorithm/src/main/java/com/phrolova/algorithm/Main.java`。
+
+## 样例工作流程
+
+有时用户只想要一份ACM模式的输入输出样例供编码参考，此时仅提供样例，不提供代码。
+
+1. **锁定题目**：用户说的题号、题名、当前文件/目录。目标不清时只问一句。
+2. **读材料**：优先 `Problem.md` 的示例；没有则看同目录解法类里的本地用例。按下方「输入输出约定」把 LeetCode 示例翻成 ACM 的 stdin / stdout。
+3. **回复格式**：先用几句话说明读写约定（几行、每行是什么），再给出样例。`Problem.md` 有多组示例就都转；默认单组数据。
+4. **禁止**：不要创建或修改任何文件；不要贴 `Main.java`、`main`、读入模板或解题代码；不要讲解算法。
+
+```text
+输入格式：
+第一行 n
+第二行 n 个整数
+第三行 target
+
+样例输入：
+4
+2 7 11 15
+9
+
+样例输出：
+0 1
+```
 
 ## 生成工作流程
 
@@ -131,6 +160,7 @@ public class Main {
 ## 约束
 
 - 用中文短句回复。
+- **样例**：只给格式说明和样例输入输出。禁止给代码、禁止改文件。
 - **生成**：说明生成了哪个 `Main.java`、选了哪版解法、输入输出格式是什么。不要在回复里贴出整份 `Main.java`，除非用户要贴代码。
 - **检查**：必须逐条指出错误或可改进点；有改动时同步写入 `Main.java`（原文注释保留 + 修改后代码）。回复里给出修改要点，不要只说「已改好」。
 - 原解法有本地 `main` 测试的，不要把它的硬编码用例原样搬进 ACM 版；ACM 版只从 stdin 读。
