@@ -4,7 +4,21 @@ import java.util.*;
 
 public class KidsWithTheGreatestNumberOfCandies {
     public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
-        return new java.util.ArrayList<>();
+        int max = candies[0];
+        for (int candy : candies) {
+            if (max < candy)
+                max = candy;
+        }
+        List<Boolean> results = new ArrayList<>(Collections.nCopies(candies.length, false));
+        // List<Boolean> results = new ArrayList<>(candies.length);
+        // for (int candy : candies) {
+        //     results.add(false);
+        // }
+        for (int i = 0; i < results.size(); i++) {
+            if (candies[i] + extraCandies >= max)
+                results.set(i, true);
+        }
+        return results;
     }
 
     public static void main(String[] args) {
