@@ -1,3 +1,3 @@
 # algorithm-notes
 
-算法与刷题笔记。LeetCode 记录见 [`algorithm/.../leetcode/`](algorithm/src/main/java/com/phrolova/algorithm/leetcode/)。
+算法与刷题笔记。LeetCode 记录见 [`algorithm/.../leetcode/`](algorithm/src/main/java/com/phrolova/algorithm/leetcode/)。笔试复盘见 [`algorithm/.../exam/`](algorithm/src/main/java/com/phrolova/algorithm/exam/)。
