@@ -42,10 +42,4 @@ public class MinTurnsDefeatCamps {
             return 0;
         return h - t * y;
     }
-
-    public static int minTurn(int n, int x, int y, int[] enemies) {
-        int minturn = 0;
-
-        return minturn;
-    }
 }
