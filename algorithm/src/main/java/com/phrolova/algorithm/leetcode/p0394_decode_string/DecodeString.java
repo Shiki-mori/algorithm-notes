@@ -57,6 +57,56 @@ public class DecodeString {
         return ret.toString();
     }
 
+    // --------------------------------
+    // 递归
+
+    String src;
+    int ptr;
+
+    public String decodeStringRecursion(String s) {
+        src = s;
+        ptr = 0;
+        return getString();
+    }
+
+    public String getString() {
+        // 到达终点
+        if (ptr == src.length() || src.charAt(ptr) == ']') {
+            return "";
+        }
+
+        char cur = src.charAt(ptr);
+        int repTime = 1;
+        String ret = "";
+
+        if (Character.isDigit(cur)) {
+            repTime = getDigits();
+            // 过滤左括号
+            ptr++;
+
+            String str = getString();
+
+            // 过滤右括号
+            ptr++;
+
+            while (repTime-- > 0) {
+                ret += str;
+            }
+        } else if (Character.isLetter(cur)) {
+            ret = String.valueOf(src.charAt(ptr++));
+        }
+
+        return ret + getString();
+    }
+
+    public int getDigits() {
+        int ret = 0;
+        while (ptr < src.length() && Character.isDigit(src.charAt(ptr))) {
+            ret = ret * 10 + src.charAt(ptr++) - '0';
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
     }
 }
