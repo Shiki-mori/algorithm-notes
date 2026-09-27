@@ -61,7 +61,6 @@ public class DecodeString {
     // 递归
 
     String src;
-    int ptr;
 
     public String decodeStringRecursion(String s) {
         src = s;
