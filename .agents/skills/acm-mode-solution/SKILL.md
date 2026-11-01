@@ -1,0 +1,166 @@
+---
+name: acm-mode-solution
+description: Converts an existing LeetCode Java solution into ACM written-test form as Main.java, reviews a user-written Main.java, or provides ACM stdin/stdout samples without code. Use when the user asks for ACM mode, ACM 笔试, 笔试输入输出, 输入输出样例, 编码参考, 自行处理输入输出, Main.java, or to check/review ACM code under algorithm/src/main/java/com/phrolova/algorithm/leetcode.
+---
+
+# ACM 模式笔试代码
+
+由于部分公司的笔试为ACM模式，因此用户需要练习ACM模式的笔试题。即需要自行处理输入和输出。当用户要求为对应题目提供ACM模式代码时，将已有的代码在同级目录下新增文件 Main.java，改写为ACM笔试代码形式。
+
+用户可能自行尝试创建 Main.java文件并编写ACM模式代码。当用户要求检查代码正确性时，若用户代码有错误或可改进，需要明确指出并提供修改后的代码。对用户的原有代码需要注释，禁止删除。
+
+有时用户只想要一份ACM模式的输入输出样例供编码参考，此时仅提供样例，不提供代码。
+
+本 skill 只处理 ACM 相关请求，不改原题解文件，不补 `Problem.md` / `Solution.md`，除非用户另外要求。
+
+先判断任务类型：
+
+- **样例**：用户只要 ACM 输入输出样例 / 编码参考，不要代码。只回复样例，不写 `Main.java`，不给算法或 I/O 代码。
+- **生成**：用户要求提供 ACM 模式代码，且目录下没有用户编写的 `Main.java`。
+- **检查**：用户要求检查正确性/对错/改进，或目录下已有用户编写的 `Main.java`。检查优先于覆盖。
+
+用户同时要样例和代码时走生成（`Main.java` 顶部仍写样例注释）。明确只要样例、编码参考、且未要求写 `Main.java` / 代码时，走样例。
+
+## 适用范围
+
+仅处理 `algorithm/src/main/java/com/phrolova/algorithm/leetcode/` 下的题目目录（`pXXXX_slug/`）。
+
+- 目标不在该目录：一句话说明范围后停止。
+- `leetcode/common/` 不是题目，不要当题改写。
+- 不要改 `algorithm/src/main/java/com/phrolova/algorithm/Main.java`。
+
+## 样例工作流程
+
+有时用户只想要一份ACM模式的输入输出样例供编码参考，此时仅提供样例，不提供代码。
+
+1. **锁定题目**：用户说的题号、题名、当前文件/目录。目标不清时只问一句。
+2. **读材料**：优先 `Problem.md` 的示例；没有则看同目录解法类里的本地用例。按下方「输入输出约定」把 LeetCode 示例翻成 ACM 的 stdin / stdout。
+3. **回复格式**：先用几句话说明读写约定（几行、每行是什么），再给出样例。`Problem.md` 有多组示例就都转；默认单组数据。
+4. **禁止**：不要创建或修改任何文件；不要贴 `Main.java`、`main`、读入模板或解题代码；不要讲解算法。
+
+```text
+输入格式：
+第一行 n
+第二行 n 个整数
+第三行 target
+
+样例输入：
+4
+2 7 11 15
+9
+
+样例输出：
+0 1
+```
+
+## 生成工作流程
+
+1. **锁定题目**：用户说的题号、题名、当前文件/目录。目标不清时只问一句。
+2. **读材料**（按存在情况，缺了就跳过）
+   - 同目录 Java 解法类：算法主体
+   - `Problem.md`：题意、示例输入输出、约束
+   - `Solution.md`：多解法时用来选主推解
+3. **选定解法**：用户点名则用点名的；否则用主推/默认那一版。不要把多种解法都塞进 `Main.java`。
+4. **设计 ACM 输入输出**：把 LeetCode 函数签名改成 stdin / stdout。格式约定见下方。必须在 `Main.java` 顶部注释写出与 LeetCode 示例对应的一份样例输入和输出。
+5. **新增文件**：在题目同级目录创建 `Main.java`。若该文件已存在且含用户代码，不要覆盖，改走检查流程。
+6. **保持原文件不动**：不要改原解法类、`Problem.md`、`Solution.md`。
+
+## 检查工作流程
+
+用户可能自行尝试创建 `Main.java` 并编写 ACM 模式代码。按下列步骤检查，不要当成「重新生成」去覆盖。
+
+1. **锁定文件**：优先读当前打开的 `Main.java`，否则读题目同级目录的 `Main.java`。
+2. **对照材料**：读同目录解法类、`Problem.md`（示例与约束）。核对算法、边界、输入输出格式、I/O 效率。
+3. **判断结果**
+   - 正确且无需改进：回复说明通过，指出依据（样例/复杂度/I/O），**不要改文件**。
+   - 有错误或可改进：回复中**明确指出**每一处问题（错在哪、为何错、应改成什么），并在同一 `Main.java` 里提供修改后的代码。
+4. **保留原文（强制）**：对用户的原有代码需要注释，禁止删除。
+   - 用 `//` 逐行注释用户原文（避免原文含 `*/` 时块注释被截断），紧挨在修改后的代码上方。
+   - 在注释块开头加一行说明，例如 `// === 原代码（保留）===`。
+   - 只注释被替换的那段；未改动的部分保持可编译、不要整文件注释掉。
+   - 禁止 `git checkout`、禁止新建另一个文件来「丢掉」原文。
+
+```java
+public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintWriter out = new PrintWriter(System.out);
+
+    // === 原代码（保留）===
+    // Scanner sc = new Scanner(System.in);
+    // int n = sc.nextInt();
+
+    int n = Integer.parseInt(br.readLine().trim());
+    // ... 修改后的读入与求解
+    out.flush();
+}
+```
+
+## 文件约定
+
+- 路径：与原解法类同目录，例如 `.../p0001_two_sum/Main.java`
+- `package` 与该目录其他 Java 文件一致
+- 顶层类名必须是 `Main`，入口为 `public static void main(String[] args)`
+- 算法与辅助结构（`ListNode`、`TreeNode`、Trie 等）写成 `Main` 的 `static` 内部类，不要 `import` `leetcode.common`，保证单文件可复制到笔试环境
+- 快读快写：`BufferedReader` + `StringTokenizer` + `PrintWriter`，结束前 `out.flush()`
+- 输出用 ACM 风格：空格分隔、逐行 `println`。不要 `Arrays.toString` 那种带括号的调试格式
+
+## 输入输出约定
+
+按题意从 `Problem.md` 示例反推一套自洽格式，并在注释里写死。默认单组数据；用户明确要求多组时，第一行读测试组数 `T` 再循环。
+
+| 原题类型 | 推荐输入 | 推荐输出 |
+| --- | --- | --- |
+| 数组 + 若干标量 | 第一行 `n`，第二行 `n` 个整数，随后各标量一行 | 按返回值打印；数组空格分隔 |
+| 字符串 | 每行一个字符串 | 按返回值打印 |
+| 链表 | 第一行 `n`，第二行 `n` 个结点值 | 空格分隔结点值；空链表打印空行 |
+| 二叉树 | 第一行层序结点数 `n`（含 `null`），第二行 `n` 个值，空结点写 `null` | 按返回值打印；若返回树则同样层序输出 |
+| 设计类（Trie 等） | 第一行操作数 `n`，随后每行 `操作名 [参数...]` | 每操作一行；`void` 打 `null`，布尔打 `true`/`false` |
+
+约束较大（如 `n` 到 `1e5`、操作到 `1e4`）时必须快 I/O，避免 `Scanner`。
+
+## 模板
+
+```java
+package com.phrolova.algorithm.leetcode.pXXXX_slug;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
+/**
+ * ACM 笔试输入（对应 LeetCode 示例）：
+ *
+ * <样例输入>
+ *
+ * ACM 笔试输出：
+ *
+ * <样例输出>
+ */
+public class Main {
+
+    static class Solver {
+        // 从原解法迁入的算法
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+
+        // 读入 -> 调用 Solver -> 输出
+
+        out.flush();
+    }
+}
+```
+
+函数题把原方法放进 `Solver`；设计题把原类改成 `static class`（见同目录已有的 `p0208_implement_trie_prefix_tree/Main.java`）。
+
+## 约束
+
+- 用中文短句回复。
+- **样例**：只给格式说明和样例输入输出。禁止给代码、禁止改文件。
+- **生成**：说明生成了哪个 `Main.java`、选了哪版解法、输入输出格式是什么。不要在回复里贴出整份 `Main.java`，除非用户要贴代码。
+- **检查**：必须逐条指出错误或可改进点；有改动时同步写入 `Main.java`（原文注释保留 + 修改后代码）。回复里给出修改要点，不要只说「已改好」。
+- 原解法有本地 `main` 测试的，不要把它的硬编码用例原样搬进 ACM 版；ACM 版只从 stdin 读。
