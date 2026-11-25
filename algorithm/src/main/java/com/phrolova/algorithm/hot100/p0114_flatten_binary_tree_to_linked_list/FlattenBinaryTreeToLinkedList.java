@@ -4,11 +4,10 @@ import com.phrolova.algorithm.hot100.common.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PropertyResourceBundle;
 
 public class FlattenBinaryTreeToLinkedList {
 
-    // 先序遍历存到链表中
+    // 先序遍历存到列表中
     public void flattenList(TreeNode root) {
         List<TreeNode> temp = new ArrayList<>();
         dfs(root, temp);
