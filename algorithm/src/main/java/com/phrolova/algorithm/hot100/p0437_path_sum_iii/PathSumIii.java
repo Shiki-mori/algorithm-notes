@@ -55,7 +55,7 @@ public class PathSumIii {
         count += dfs(node.right, cur);
 
         // 回溯：cur 出现次数 -1
-        // 先递归左子树，递归结束后撤掉左子树登记过的前缀和，这样右子树使用的就是和左子树相同的cur
+        // 先递归左子树，递归结束后撤掉左子树登记过的前缀和，这样进入右子树时，map 和进入左子树时一样
         prefixCount.put(cur, prefixCount.get(cur) - 1);
 
         return count;
