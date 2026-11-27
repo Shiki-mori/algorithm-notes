@@ -5,7 +5,7 @@ public class SearchInsertPosition {
         int left = 0;
         int right = nums.length - 1;
 
-        int mid = 0;
+        int mid;
 
         while (left <= right) {
             mid = left + (right - left) / 2;
